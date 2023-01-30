@@ -1,23 +1,18 @@
-import React from 'react'
-import { Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import { CreatePoll, Home, LeaderBoard, NotFound, PollDetails } from "./pages";
 
 export default function AuthApp() {
-   return (
+  return (
     <>
       <Navbar />
-      <h1>React/Redux Employee Polls Application</h1>
-      {/* Navbar w/ Links */}
       <Routes>
-
-        {/* Setup Routes w/Routes */}
-        {/* UnAuth Route Signup And/Or Login Page */}
-
-        {/* Authenticated Routes */}
-        {/* Route Leaderboard */}
-        {/* Route HomePage Answered Questions / UnAnswered Questions */}
-        {/* Route Question */}
-        {/* Route Form to Create Question and Answers */}
+        <Route path="/" element={<Home />} />
+        <Route path="leaderboard" element={<LeaderBoard />} />
+        <Route path="add" element={<CreatePoll />} />
+        <Route path="questions/:question_id" element={<PollDetails />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

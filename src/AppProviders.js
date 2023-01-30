@@ -1,13 +1,18 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
-import { store } from "./app/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "./app/store";
 
 const AppProviders = ({ children }) => {
   
   return (
     <Provider store={store}>
-      <Router>{children}</Router>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <div className="min-h-screen bg-zinc-100">{children}</div>
+        </Router>
+      </PersistGate>
     </Provider>
   );
 };
