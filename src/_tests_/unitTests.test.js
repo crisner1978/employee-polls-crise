@@ -1,37 +1,21 @@
 import { cleanup } from '@testing-library/react'
-import firebase from 'firebase/app'
-import { connectAuthEmulator, getAuth } from 'firebase/auth'
-import { createQuestion } from '../lib/createQuestion'
-import { saveQuestionAnswer } from '../lib/saveQuestionAnswer'
+import { _saveQuestion, _saveQuestionAnswer } from '../utils/_DATA'
 
 beforeEach(cleanup)
 
-describe('firebase functions', () => {
-  beforeAll(async () => {
-    const app = !firebase?.getApps()?.length
-      ? firebase?.initializeApp({ apiKey: 'dummy-apiKey', projectId: 'demo-1' })
-      : firebase.app()
-    const auth = getAuth(app)
-    connectAuthEmulator(auth, 'http://localhost:9099')
-  })
-  describe('Save Question', () => {
+describe('_DATA.js ASYNC Functions', () => {
+  describe('_saveQuestion', () => {
     it('returns the saved question and all expected fields when correctly formatted data is passed to the function', async () => {
       const question = {
         author: '@ChrisRisner',
-        timestamp: 1673936266188,
-        optionOne: {
-          text: 'Vanilla Javascript',
-          votes: [],
-        },
-
-        optionTwo: {
-          text: 'Vite React',
-          votes: [],
-        },
+        optionOneText: 'Vanilla Javascript',
+        optionTwoText: 'Vite React',
       }
-
-      const { id, ...rest } = await createQuestion(question)
-      expect(question).toMatchObject(rest)
+      const result = await _saveQuestion(question)
+      expect(result).toBeTruthy()
+      expect(result).toHaveProperty('author', question.author)
+      expect(result).toHaveProperty('optionTwo.text', question.optionTwoText)
+      expect(result).toHaveProperty('optionOne.text', question.optionOneText)
     })
 
     it('returns an error if incorrect data is passed to the function', async () => {
@@ -42,46 +26,23 @@ describe('firebase functions', () => {
         },
       }
       expect.assertions(1)
-      await expect(createQuestion(question)).rejects.toMatch(
-        'Please provide options one and option two'
+      await expect(_saveQuestion(question)).rejects.toMatch(
+        'Please provide optionOneText, optionTwoText, and author'
       )
     })
   })
 
-  describe('SaveQuestionAnswer', () => {
+  describe('_saveQuestionAnswer', () => {
     it('returns saved question answer when all expected fields are passed to the function', async () => {
       const answerObj = {
-        authUser: {
-          name: 'Chris Risner',
-          uid: 'RsTyi1O7SEagm60Mdn42KtjehTT2',
-          username: '@ChrisRisner',
-          answers: {
-            PhVf1nI898eYygqn28Mq: 'optionOne',
-            XKoyJoDo8tZvd5gWmAFK: 'optionOne',
-            G7n26epDeqKdlHWHL6ak: 'optionOne',
-          },
-          questions: [
-            'PdJfJ5xpIFbqSdtUenDV',
-            'IVDRLRljv2eXmYQjuixj',
-            'Rr5W0DZaHLR0wGkDYo9m',
-            'EO0JfaTDPNZxY5nizCGz',
-            'XKoyJoDo8tZvd5gWmAFK',
-            'PhVf1nI898eYygqn28Mq',
-          ],
-          avatarURL:
-            'https://lh3.googleusercontent.com/a-/ACNPEu_xdGmeJT1kuQfhO_loCeuuJ1hR40isulNPSUCq=s96-c',
-        },
-        answer: 'optionTwo',
-        text: 'Angular',
-        qid: 'Tc5F1YfztEfF7hFCI7pp',
+        authedUser: 'sarahedo',
+        answer: 'optionOne',
+        text: 'deploy to production once every two weeks',
+        qid: 'xj352vofupe1dqz9emx13r',
       }
-      const result = await saveQuestionAnswer(answerObj)
-      const qid = result.qid
-      const choice = result.answer
-      expect({ qid: qid, answer: choice }).toMatchObject({
-        qid: answerObj.qid,
-        answer: answerObj.answer,
-      })
+      expect.assertions(1)
+      const result = await _saveQuestionAnswer(answerObj)
+      expect(result).toEqual(true)
     })
     it('returns an error if incorrect data is passed to the function', async () => {
       const payload = {
@@ -91,8 +52,8 @@ describe('firebase functions', () => {
         user: { name: 'Chris' },
       }
       expect.assertions(1)
-      await expect(saveQuestionAnswer(payload)).rejects.toMatch(
-        'Please provide authUser, answer, and qid'
+      await expect(_saveQuestionAnswer(payload)).rejects.toMatch(
+        'Please provide authedUser, qid, and answer'
       )
     })
   })

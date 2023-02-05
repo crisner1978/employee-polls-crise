@@ -7,7 +7,7 @@ import { selectAuthUser } from '../features/authSlice'
 import Dropdown from './Dropdown'
 
 const Navbar = () => {
-  const { username, name } = useSelector(selectAuthUser)
+  const authUser = useSelector(selectAuthUser)
   const [isVisible, setVisible] = useState(false)
   const outsideRef = useDetectClickOutside({
     onTriggered: () => setVisible(false),
@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const toggleDropdown = () => setVisible(!isVisible)
 
-  if (!username || !name) return null
+  if (!authUser) return null
 
   return (
     <div ref={outsideRef} className='sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm'>
@@ -62,12 +62,14 @@ const Navbar = () => {
             className='relative flex w-fit cursor-pointer items-center space-x-2'
             onClick={toggleDropdown}>
             <img
-              src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${username || name}`}
-              alt={username}
+              src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${authUser?.name}`}
+              alt={authUser?.name}
               className='h-8 w-8 rounded-full'
             />
-            <span className='hidden text-lg font-bold leading-none md:inline'>{username}</span>
-            {isVisible && <Dropdown username={username} />}
+            <span className='hidden text-lg font-bold leading-none md:inline'>
+              {authUser?.name}
+            </span>
+            {isVisible && <Dropdown username={authUser?.name} />}
           </div>
         </div>
       </div>

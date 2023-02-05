@@ -4,27 +4,24 @@ import AuthApp from './AuthApp'
 import { selectAuthUser } from './features/authSlice'
 import { fetchQuestions } from './features/questionsSlice'
 import { fetchUsers } from './features/usersSlice'
-import { useAuthUser } from './lib/firebase'
-import UnAuthApp from './UnAuthApp'
+import { Login } from './pages'
 
 function App() {
-  const user = useSelector(selectAuthUser)
+  const authUser = useSelector(selectAuthUser)
   const dispatch = useDispatch()
 
   useEffect(() => {
     let subscribed = true
-    if (user && subscribed) {
+    if (authUser && subscribed) {
       dispatch(fetchQuestions())
       dispatch(fetchUsers())
     }
     return () => {
       subscribed = false
     }
-  }, [dispatch, user])
+  }, [dispatch, authUser])
 
-  useAuthUser()
-
-  return user ? <AuthApp /> : <UnAuthApp />
+  return authUser ? <AuthApp /> : <Login />
 }
 
 export default App

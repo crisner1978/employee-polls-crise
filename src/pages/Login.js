@@ -1,63 +1,71 @@
-import React from "react";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
-import db, { auth, googleProvider, githubProvider } from "../lib/firebase";
-import { signInWithPopup } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore/lite";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { loginAuthUser } from '../features/authSlice'
+import { fetchUsers } from '../features/usersSlice'
 
-export default function Login({ setNewUser, setUser }) {
-  const navigate = useNavigate();
+export default function Login() {
+  const [user, setUser] = useState(null)
+  const [users, setUsers] = useState(null)
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  async function signIn(provider) {
-    const data = await signInWithPopup(auth, provider);
-    if (data) {
-      await checkUsername(data.user.uid);
-      setUser(data.user);
-      navigate("/", { replace: true });
+  useEffect(() => {
+    dispatch(fetchUsers()).then((res) => {
+      setUsers(res.payload)
+    })
+  }, [dispatch])
+
+  console.log('users', users)
+  useEffect(() => {
+    if (!user && location.pathname !== '/') {
+      navigate('/', { replace: true })
     }
+  }, [location.pathname, navigate, user])
+
+  async function login(user) {
+    setUser(users[user])
+    dispatch(loginAuthUser(users[user]))
+    navigate('/', { replace: true })
   }
 
-  async function checkUsername(uid) {
-    const col = collection(db, "usernames");
-    const q = query(col, where("uid", "==", uid));
-    const { empty } = await getDocs(q);
-    setNewUser(empty);
-  }
-
+  if (!users)
+    return (
+      <div data-testid='login_loading' className='flex h-screen items-center justify-center font-mono text-4xl font-semibold'>
+        Loading...
+      </div>
+    )
   return (
-    <div className="w-80 mx-auto">
-      <header className="pt-20 mb-8 text-center">
-        <h1 className="font-bold text-xl">Sign Up for Employee Polls</h1>
+    <div className='mx-auto w-80'>
+      <header className='mb-8 pt-20 text-center'>
+        <h1 data-testid='login_page' className='text-xl font-bold'>Login Employee Polls</h1>
       </header>
 
-      <div className="space-y-4">
-        <LoginOption
-          Icon={FcGoogle}
-          onClick={() => signIn(googleProvider)}
-          text="Continue with Google"
-        />
-        <LoginOption
-          Icon={FaGithub}
-          onClick={() => signIn(githubProvider)}
-          text="Continue with Github"
-        />
+      <div className='space-y-4'>
+        {Object.keys(users)?.map((user, i) => (
+          <LoginOption key={i} user={user} onClick={() => login(user)} />
+        ))}
       </div>
     </div>
-  );
+  )
 }
 
-function LoginOption({ Icon, onClick, text }) {
+function LoginOption({ user, onClick }) {
   return (
     <div
-      className="flex items-center cursor-pointer bg-white hover:bg-gray-100 rounded-[5px] border border-gray-300 h-14"
+      className='flex h-14 cursor-pointer items-center rounded-[5px] border border-gray-300 bg-white hover:bg-gray-100'
       onClick={onClick}>
-      <div className="rounded-l-[5px] px-3">
-        <Icon className="h-5 w-5 mx-2" />
+      <div className='rounded-l-[5px] px-3'>
+        <img
+          src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${user}`}
+          alt={user}
+          className='h-8 w-8 rounded-full'
+        />
       </div>
-      <div className="border-l border-gray-300 rounded-r-[5px] p-4 h-12 w-full flex justify-center items-center">
-        <h3 className="font-medium">{text}</h3>
+      <div className='flex h-12 w-full items-center justify-center rounded-r-[5px] border-l border-gray-300 p-4'>
+        <h3 className='font-medium'>{user}</h3>
       </div>
     </div>
-  );
+  )
 }

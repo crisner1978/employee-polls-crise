@@ -1,54 +1,45 @@
-import {
-  ClipboardDocumentListIcon,
-  PlusCircleIcon
-} from "@heroicons/react/24/outline";
-import { ArrowLeftOnRectangleIcon, UserIcon } from "@heroicons/react/24/solid";
-import { signOut } from "firebase/auth";
-import React from "react";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logoutRedux } from "../features/authSlice";
-import { auth } from "../lib/firebase";
-import DropdownOption from "./DropdownOption";
+import { ClipboardDocumentListIcon, PlusCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowLeftOnRectangleIcon, UserIcon } from '@heroicons/react/24/solid'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { logoutAuthUser } from '../features/authSlice'
+import DropdownOption from './DropdownOption'
 
 const Dropdown = ({ username }) => {
   const dispatch = useDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+
   async function logOut() {
-    dispatch(logoutRedux())
-    signOut(auth);
-    window.location.reload();
+    dispatch(logoutAuthUser())
+    navigate('/', { replace: true })
   }
 
   return (
-    <div className="absolute py-2 bg-white border border-t-0 rounded-xl top-11 -right-4 w-48">
+    <div className='absolute top-11 -right-4 w-48 rounded-xl border border-t-0 bg-white py-2'>
       <DropdownOption
-        onClick={() => navigate("/")}
-        icon={<UserIcon className="h-6 w-6 group-hover:bg-gray-100" />}
+        onClick={() => navigate('/')}
+        icon={<UserIcon className='h-6 w-6 group-hover:bg-gray-100' />}
         text={username}
       />
       <DropdownOption
-        onClick={() => navigate("leaderboard")}
-        icon={
-          <ClipboardDocumentListIcon className="h-6 w-6 group-hover:bg-gray-100" />
-        }
-        text="Leaderboard"
+        onClick={() => navigate('leaderboard')}
+        icon={<ClipboardDocumentListIcon className='h-6 w-6 group-hover:bg-gray-100' />}
+        text='Leaderboard'
       />
       <DropdownOption
-        icon={
-          <PlusCircleIcon className="h-6 w-6 group-hover:bg-gray-100 rounded-full" />
-        }
-        text="Add Poll"
-        onClick={() => navigate("add")}
+        icon={<PlusCircleIcon className='h-6 w-6 rounded-full group-hover:bg-gray-100' />}
+        text='Add Poll'
+        onClick={() => navigate('add')}
       />
       <DropdownOption
-        icon={<ArrowLeftOnRectangleIcon className="rotate-180 h-6 w-6" />}
-        text="Logout"
+        icon={<ArrowLeftOnRectangleIcon className='h-6 w-6 rotate-180' />}
+        text='Logout'
         onClick={logOut}
         border
       />
     </div>
-  );
-};
+  )
+}
 
-export default Dropdown;
+export default Dropdown

@@ -16,12 +16,12 @@ export default function PollDetails() {
   const { handleSubmit, control, reset, watch } = useForm()
   const question = useSelector((state) => selectQuestionById(state, question_id))
   const users = useSelector(selectAllUsers)
-  const authUser = useSelector(selectAuthUser)
+  const authedUser = useSelector(selectAuthUser)
 
   const watchOptionOne = watch('optionOne')
   const watchOptionTwo = watch('optionTwo')
 
-  const hasAnswered = authUser?.answers?.[question_id]
+  const hasAnswered = authedUser?.answers?.[question_id]
 
   useEffect(() => {
     if (!question) {
@@ -29,17 +29,17 @@ export default function PollDetails() {
     }
   }, [navigate, question])
 
-
   async function pollAnswer(data) {
     const { optionOne } = data
     const answer = optionOne === true ? 'optionOne' : 'optionTwo'
     const text = optionOne ? question?.optionOne.text : question?.optionTwo.text
     const answerObj = {
-      authUser,
+      authedUser: authedUser.id,
       answer,
       text,
       qid: question.id,
     }
+    console.log(answerObj)
     const result = await dispatch(saveUserAnswer(answerObj)).unwrap()
     return result
   }
@@ -56,7 +56,7 @@ export default function PollDetails() {
           <p className='pb-4 text-lg font-semibold text-white'>Poll by {question?.author}</p>
           <img
             className='h-36 w-36 rounded-full ring-8 ring-white'
-            src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${question.author}`}
+            src={`https://api.dicebear.com/5.x/pixel-art/svg?seed=${question?.author}`}
             alt='Poll Author'
           />
         </div>
@@ -109,8 +109,6 @@ export default function PollDetails() {
           </div>
         )}
       </div>
-
-      {/* What you selected and Stats on Poll */}
     </div>
   )
 }

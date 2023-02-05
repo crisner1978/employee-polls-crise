@@ -1,5 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { getUsers } from '../lib/firebase'
+import { _getUsers } from '../utils/_DATA'
+
 
 const usersAdapter = createEntityAdapter()
 const initialState = usersAdapter.getInitialState()
@@ -20,6 +21,6 @@ export const { selectAll: selectAllUsers, selectById: selectUserById } = usersAd
 export default usersSlice.reducer
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await getUsers()
+  const response = await _getUsers()
   return response
 })

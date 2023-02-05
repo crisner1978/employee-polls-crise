@@ -1,6 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import { createQuestion } from '../lib/createQuestion'
-import { getQuestions } from '../lib/firebase'
+import { _getQuestions, _saveQuestion } from '../utils/_DATA'
 
 const questionsAdapter = createEntityAdapter({
   sortComparer: (a, b) => Date(b.timestamp).localeCompare(Date(a.timestamp)),
@@ -28,17 +27,16 @@ export const {
   selectAll: selectAllQuestions,
   selectById: selectQuestionById,
   selectIds: selectQuestionIds,
-  // Pass in a selector that returns the posts slice of state
 } = questionsAdapter.getSelectors((state) => state.questions)
 
 export default questionsSlice.reducer
 
-export const addQuestion = createAsyncThunk('questions/addQuestion', async (question) => {
-  const response = await createQuestion(question)
+export const fetchQuestions = createAsyncThunk('questions/fetchQuestions', async () => {
+  const response = await _getQuestions()
   return response
 })
 
-export const fetchQuestions = createAsyncThunk('questions/fetchQuestions', async () => {
-  const response = await getQuestions()
+export const addQuestion = createAsyncThunk('questions/addQuestion', async (question) => {
+  const response = await _saveQuestion(question)
   return response
 })

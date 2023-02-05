@@ -1,5 +1,5 @@
-import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { saveQuestionAnswer } from '../lib/saveQuestionAnswer'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { _saveQuestionAnswer } from '../utils/_DATA'
 
 const initialState = {
   authUser: null,
@@ -17,20 +17,20 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(saveUserAnswer.fulfilled, (state, { payload }) => {
-      const { answers } = payload
-      state.authUser.answers = answers
+    builder.addCase(saveUserAnswer.fulfilled, (state, { meta }) => {
+      const { answer, qid } = meta.arg
+      state.authUser.answers[qid] = answer
     })
   },
 })
-export const logoutRedux = createAction('auth/logout')
+
 export const { loginAuthUser, logoutAuthUser } = authSlice.actions
 
 export const selectAuthUser = (state) => state.auth.authUser
 
-export const saveUserAnswer = createAsyncThunk('auth/saveUserAnswer', async (answerObj) => {
-  const { user } = await saveQuestionAnswer(answerObj)
-  return user
-})
+export const saveUserAnswer = createAsyncThunk(
+  'auth/saveUserAnswer',
+  async (answerObj) => await _saveQuestionAnswer(answerObj)
+)
 
 export default authSlice.reducer

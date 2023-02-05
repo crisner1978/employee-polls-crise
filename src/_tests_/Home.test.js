@@ -14,4 +14,13 @@ describe('Home Page unit tests', () => {
 
     expect(screen.getByText('New Questions')).toBeInTheDocument()
   })
+  it('renders Done section', () => {
+    renderWithProviders(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    )
+
+    expect(screen.getByText('Done')).toBeInTheDocument()
+  })
 })
