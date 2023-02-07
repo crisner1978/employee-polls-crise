@@ -1,27 +1,65 @@
 # Employee Polls Project React, Redux Toolkit and Firebase
+Voting app for users to create, vote and compete for the number one spot as the most active user answering and creating new polls.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+## This project was created using the following tool chains:
+- [Create React App](https://github.com/facebook/create-react-app)
+- [Redux](https://redux.js.org/) 
+- [Redux Toolkit](https://redux-toolkit.js.org/) template.
+- [headlesUI](https://headlessui.com/)
+- [heroicons](https://heroicons.com/)
+- [moment](https://momentjs.com/)
+- [React Hook Form](https://react-hook-form.com/)
+- [React Icons](https://react-icons.github.io/react-icons/)
+- [React Redux](https://react-redux.js.org/)
+- [React Router](https://reactrouter.com/en/main)
 
-## Available Scripts
+### To Get Started
+Copy and paste into your favorite Code Editor\
+Be sure you are are cloning it into the directory you want this project to live.
 
-In the project directory, you can run:
+```
+git clone https://github.com/crisner1978/employee-polls-crise.git
+```
 
-### `npm start`
+### After Cloning the repository
+The next step is to install the project.\
+If using `npm` input the following into your terminal
 
-Runs the app in the development mode.\
+```
+npm install
+```
+
+If you would like to use `yarn`\
+Please delete the package-lock.json\ 
+Then input the following in your terminal.
+
+```
+yarn
+```
+
+### Once Installed, you can start the application by entering the following in your terminal
+- npm `npm start`
+- yarn `yarn start`
+
+This Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### To Run the TESTS
+You can run npm or yarn. Whichever package manager you chose when installing the application, be sure to use the same to run the tests.
+```
+npm test
+```
 
-### `npm test`
+```
+yarn test
+```
 
-Launches the test runner in the interactive watch mode.\
+This Launches the Test Runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
+### Ready to go to Production?
+You can build the application by running `npm run build`.\
+This command builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
@@ -29,9 +67,7 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-
-
-## Employee Polls Project
+## More Project Details - Employee Polls Project
 This is the starter code for the final assessment project for Udacity's React & Redux course.
 
 The _DATA.js file represents a fake database and methods that let you access the data. The only thing you need to edit in the _DATA.js file is the value of avatarURL. Each user should have an avatar, so you’ll need to add the path to each user’s avatar.

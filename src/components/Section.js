@@ -8,10 +8,10 @@ export default function Section({ data, title, text }) {
         {title}
       </h1>
       <div className='pt-2'>
-        {data.length ? (
+        {data?.length ? (
           <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-            {data?.map((questionId) => (
-              <QuestionCard key={questionId} questionId={questionId} />
+            {data?.map((question) => (
+              <QuestionCard key={question.id} questionId={question.id} />
             ))}
           </div>
         ) : (

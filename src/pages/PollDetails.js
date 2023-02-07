@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import ProgressBar from '../components/ProgressBar'
 import ToggleInput from '../components/ToggleInput'
 import { saveUserAnswer, selectAuthUser } from '../features/authSlice'
@@ -22,12 +22,6 @@ export default function PollDetails() {
   const watchOptionTwo = watch('optionTwo')
 
   const hasAnswered = authedUser?.answers?.[question_id]
-
-  useEffect(() => {
-    if (!question) {
-      navigate('/404-no-poll-found', { replace: true })
-    }
-  }, [navigate, question])
 
   async function pollAnswer(data) {
     const { optionOne } = data

@@ -17,31 +17,35 @@ export default function Login() {
     })
   }, [dispatch])
 
-  console.log('users', users)
-  useEffect(() => {
-    if (!user && location.pathname !== '/') {
-      navigate('/', { replace: true })
-    }
-  }, [location.pathname, navigate, user])
-
   async function login(user) {
     setUser(users[user])
     dispatch(loginAuthUser(users[user]))
+    if (location.pathname !== '/') {
+      return
+    }
     navigate('/', { replace: true })
   }
 
   if (!users)
     return (
-      <div data-testid='login_loading' className='flex h-screen items-center justify-center font-mono text-4xl font-semibold'>
+      <div
+        data-testid='login_loading'
+        className='flex h-screen items-center justify-center font-mono text-4xl font-semibold'>
         Loading...
       </div>
     )
   return (
     <div className='mx-auto w-80'>
-      <header className='mb-8 pt-20 text-center'>
-        <h1 data-testid='login_page' className='text-xl font-bold'>Login Employee Polls</h1>
+      <header className='mb-4 pt-20 text-center'>
+        <h1 data-testid='login_page' className='border-b-4 pb-2 text-2xl font-bold'>
+          Employee Polls Login Portal
+        </h1>
       </header>
-
+      {!user && (
+        <h2 className='mb-4 border-b-2 pb-2 text-center text-xl font-medium shadow-sm shadow-black/30'>
+          Please select a user to login
+        </h2>
+      )}
       <div className='space-y-4'>
         {Object.keys(users)?.map((user, i) => (
           <LoginOption key={i} user={user} onClick={() => login(user)} />

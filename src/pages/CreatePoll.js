@@ -15,7 +15,8 @@ export default function CreatePoll() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+
+    formState: { errors, isSubmitting },
   } = useForm({ mode: 'onBlur' })
 
   async function postQuestion(data) {
@@ -62,7 +63,7 @@ export default function CreatePoll() {
           type='text'
           placeholder='Enter Option Two'
         />
-        <button data-testid='submit-question' className='formSubmitBtn'>
+        <button disabled={isSubmitting} data-testid='submit-question' className='formSubmitBtn'>
           Submit Question
         </button>
       </form>
