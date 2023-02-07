@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import AuthApp from './AuthApp'
 import { selectAuthUser } from './features/authSlice'
 import { fetchQuestions } from './features/questionsSlice'
-import { fetchUsers } from './features/usersSlice'
 import { routes } from './lib/routes'
 import { Login } from './pages'
 
@@ -26,7 +25,6 @@ function App() {
     let subscribed = true
     if (authUser && subscribed) {
       dispatch(fetchQuestions())
-      dispatch(fetchUsers())
     }
     return () => {
       subscribed = false

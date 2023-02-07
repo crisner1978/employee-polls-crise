@@ -6,19 +6,51 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="flex h-screen items-center justify-center font-mono text-4xl font-semibold"
-        data-testid="login_loading"
+        class="mx-auto w-80"
       >
-        Loading...
+        <header
+          class="mb-4 pt-20 text-center"
+        >
+          <h1
+            class="border-b-4 pb-2 text-2xl font-bold"
+            data-testid="login_page"
+          >
+            Employee Polls Login Portal
+          </h1>
+        </header>
+        <h2
+          class="mb-4 border-b-2 pb-2 text-center text-xl font-medium shadow-sm shadow-black/30"
+        >
+          Please select a user to login
+        </h2>
+        <div
+          class="space-y-4"
+        />
       </div>
     </div>
   </body>,
   "container": <div>
     <div
-      class="flex h-screen items-center justify-center font-mono text-4xl font-semibold"
-      data-testid="login_loading"
+      class="mx-auto w-80"
     >
-      Loading...
+      <header
+        class="mb-4 pt-20 text-center"
+      >
+        <h1
+          class="border-b-4 pb-2 text-2xl font-bold"
+          data-testid="login_page"
+        >
+          Employee Polls Login Portal
+        </h1>
+      </header>
+      <h2
+        class="mb-4 border-b-2 pb-2 text-center text-xl font-medium shadow-sm shadow-black/30"
+      >
+        Please select a user to login
+      </h2>
+      <div
+        class="space-y-4"
+      />
     </div>
   </div>,
   "debug": [Function],

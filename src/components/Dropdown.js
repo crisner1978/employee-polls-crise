@@ -6,12 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import { logoutAuthUser } from '../features/authSlice'
 import DropdownOption from './DropdownOption'
 
-const Dropdown = ({ username }) => {
+const Dropdown = ({ authUser }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   async function logOut() {
-    dispatch(logoutAuthUser())
+    dispatch(logoutAuthUser(authUser.id))
     navigate('/', { replace: true })
   }
 
@@ -20,7 +20,7 @@ const Dropdown = ({ username }) => {
       <DropdownOption
         onClick={() => navigate('/')}
         icon={<UserIcon className='h-6 w-6 group-hover:bg-gray-100' />}
-        text={username}
+        text={authUser.name}
       />
       <DropdownOption
         onClick={() => navigate('leaderboard')}

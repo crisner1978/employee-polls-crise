@@ -69,7 +69,7 @@ const Navbar = () => {
             <span className='hidden text-lg font-bold leading-none md:inline'>
               {authUser?.name}
             </span>
-            {isVisible && <Dropdown username={authUser?.name} />}
+            {isVisible && <Dropdown authUser={authUser} />}
           </div>
         </div>
       </div>

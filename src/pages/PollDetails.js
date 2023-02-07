@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react'
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ProgressBar from '../components/ProgressBar'
 import ToggleInput from '../components/ToggleInput'
 import { saveUserAnswer, selectAuthUser } from '../features/authSlice'
@@ -12,11 +12,15 @@ import { selectAllUsers } from '../features/usersSlice'
 export default function PollDetails() {
   const { question_id } = useParams()
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const { handleSubmit, control, reset, watch } = useForm()
   const question = useSelector((state) => selectQuestionById(state, question_id))
   const users = useSelector(selectAllUsers)
   const authedUser = useSelector(selectAuthUser)
+  const navigate = useNavigate(0)
+
+  useEffect(() => {
+    if (!question) navigate('/404')
+  },[question, navigate])
 
   const watchOptionOne = watch('optionOne')
   const watchOptionTwo = watch('optionTwo')
@@ -33,7 +37,6 @@ export default function PollDetails() {
       text,
       qid: question.id,
     }
-    console.log(answerObj)
     const result = await dispatch(saveUserAnswer(answerObj)).unwrap()
     return result
   }

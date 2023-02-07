@@ -1,14 +1,19 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
+import store from './app/store'
 import AppProviders from './AppProviders'
+import { fetchUsers } from './features/usersSlice'
 import './index.css'
 
-const container = document.getElementById('root')
-const root = createRoot(container)
-
-root.render(
-  <AppProviders>
-    <App />
-  </AppProviders>
-)
+async function main() {
+  const container = document.getElementById('root')
+  const root = createRoot(container)
+  store.dispatch(fetchUsers())
+  root.render(
+    <AppProviders>
+      <App />
+    </AppProviders>
+  )
+}
+main()

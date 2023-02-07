@@ -1,5 +1,6 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit'
 import { _getQuestions, _saveQuestion } from '../utils/_DATA'
+import { createQuestion } from './authSlice'
 
 const questionsAdapter = createEntityAdapter({
   sortComparer: (a, b) => Date(b.timestamp).localeCompare(Date(a.timestamp)),
@@ -36,7 +37,8 @@ export const fetchQuestions = createAsyncThunk('questions/fetchQuestions', async
   return response
 })
 
-export const addQuestion = createAsyncThunk('questions/addQuestion', async (question) => {
+export const addQuestion = createAsyncThunk('questions/addQuestion', async (question, thunkAPI) => {
   const response = await _saveQuestion(question)
+  await thunkAPI.dispatch(createQuestion(response))
   return response
 })
