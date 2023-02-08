@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 
-const ProgressBar = ({ bgColor, answered, users, label, hasAnswered }) => {
+const ProgressBar = ({ bgColor, answered, totalVotes, label, hasAnswered }) => {
   const [percentage, setPercentage] = useState(0)
-
+  console.log('percentage: ', percentage)
   useEffect(() => {
     let interval = setInterval(
-      () => setPercentage(Math.floor((answered / users) * 100).toString()),
+      () => setPercentage(Math.floor((answered / totalVotes) * 100) || 0),
       500
     )
     return () => {
       clearInterval(interval)
     }
-  }, [answered, users])
+  }, [answered, totalVotes])
 
   const containerStyles = {
     height: 30,
@@ -42,7 +42,7 @@ const ProgressBar = ({ bgColor, answered, users, label, hasAnswered }) => {
     <div className=''>
       <div className='-mb-1 flex justify-end'>
         <span className='font-medium text-gray-500'>
-          {answered} out of {users}{' '}
+          {answered} out of {totalVotes}{' '}
         </span>
       </div>
       <div style={containerStyles}>

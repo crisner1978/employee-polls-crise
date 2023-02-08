@@ -7,20 +7,21 @@ import ProgressBar from '../components/ProgressBar'
 import ToggleInput from '../components/ToggleInput'
 import { saveUserAnswer, selectAuthUser } from '../features/authSlice'
 import { selectQuestionById } from '../features/questionsSlice'
-import { selectAllUsers } from '../features/usersSlice'
 
 export default function PollDetails() {
   const { question_id } = useParams()
   const dispatch = useDispatch()
   const { handleSubmit, control, reset, watch } = useForm()
-  const question = useSelector((state) => selectQuestionById(state, question_id))
-  const users = useSelector(selectAllUsers)
   const authedUser = useSelector(selectAuthUser)
-  const navigate = useNavigate(0)
+  const navigate = useNavigate()
+  const question = useSelector((state) => selectQuestionById(state, question_id))
+  let optOne = question?.optionOne.votes.length
+  let optTwo = question?.optionTwo.votes.length
+  const [totalVotes, setTotalVotes] = React.useState(optOne + optTwo)
 
   useEffect(() => {
     if (!question) navigate('/404')
-  },[question, navigate])
+  }, [question, navigate])
 
   const watchOptionOne = watch('optionOne')
   const watchOptionTwo = watch('optionTwo')
@@ -29,16 +30,20 @@ export default function PollDetails() {
 
   async function pollAnswer(data) {
     const { optionOne } = data
-    const answer = optionOne === true ? 'optionOne' : 'optionTwo'
-    const text = optionOne ? question?.optionOne.text : question?.optionTwo.text
-    const answerObj = {
-      authedUser: authedUser.id,
-      answer,
-      text,
-      qid: question.id,
+    try {
+      const answer = optionOne === true ? 'optionOne' : 'optionTwo'
+      const text = optionOne ? question?.optionOne.text : question?.optionTwo.text
+      const answerObj = {
+        authedUser: authedUser.id,
+        answer,
+        text,
+        qid: question.id,
+      }
+      const result = await dispatch(saveUserAnswer(answerObj)).unwrap()
+      return result
+    } catch (error) {
+      console.log(error)
     }
-    const result = await dispatch(saveUserAnswer(answerObj)).unwrap()
-    return result
   }
 
   async function onSubmit(data) {
@@ -91,14 +96,14 @@ export default function PollDetails() {
           <div className='flex w-full flex-col gap-y-8 rounded-[4px] bg-white p-8 px-16'>
             <ProgressBar
               hasAnswered={hasAnswered === 'optionOne' && hasAnswered}
-              users={users.length}
+              totalVotes={totalVotes}
               bgColor='#F15500'
               label={question?.optionOne.text}
               answered={question?.optionOne.votes.length}
             />
             <ProgressBar
               hasAnswered={hasAnswered === 'optionTwo' && hasAnswered}
-              users={users.length}
+              totalVotes={totalVotes}
               bgColor='#F15500'
               label={question?.optionTwo.text}
               answered={question?.optionTwo.votes.length}
