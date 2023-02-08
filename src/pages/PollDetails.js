@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,6 +7,7 @@ import ProgressBar from '../components/ProgressBar'
 import ToggleInput from '../components/ToggleInput'
 import { saveUserAnswer, selectAuthUser } from '../features/authSlice'
 import { selectQuestionById } from '../features/questionsSlice'
+import NotFound from './NotFound'
 
 export default function PollDetails() {
   const { question_id } = useParams()
@@ -19,9 +20,7 @@ export default function PollDetails() {
   let optTwo = question?.optionTwo.votes.length
   const [totalVotes, setTotalVotes] = React.useState(optOne + optTwo)
 
-  useEffect(() => {
-    if (!question) navigate('/404')
-  }, [question, navigate])
+
 
   const watchOptionOne = watch('optionOne')
   const watchOptionTwo = watch('optionTwo')
@@ -30,8 +29,7 @@ export default function PollDetails() {
 
   async function pollAnswer(data) {
     const { optionOne } = data
-    try {
-      const answer = optionOne === true ? 'optionOne' : 'optionTwo'
+    const answer = optionOne === true ? 'optionOne' : 'optionTwo'
       const text = optionOne ? question?.optionOne.text : question?.optionTwo.text
       const answerObj = {
         authedUser: authedUser.id,
@@ -41,15 +39,14 @@ export default function PollDetails() {
       }
       const result = await dispatch(saveUserAnswer(answerObj)).unwrap()
       return result
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   async function onSubmit(data) {
     await pollAnswer(data)
     reset()
   }
+
+  if (!question) return <NotFound />
 
   return (
     <div className='flex flex-col items-center space-y-8 '>
